@@ -1,0 +1,131 @@
+.calendar {
+  width: 100%;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.calendar-header {
+  margin-bottom: 2px;
+}
+
+.calendar-weekday {
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #6b7280;
+  padding: 0.4rem 0;
+}
+
+.calendar-weekday.sunday {
+  color: #ef4444;
+}
+
+.calendar-weekday.saturday {
+  color: #3b82f6;
+}
+
+.calendar-cell {
+  min-height: 72px;
+  padding: 0.3rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: #fff;
+  transition: background 0.15s, box-shadow 0.15s;
+  position: relative;
+}
+
+.calendar-cell:hover:not(.empty) {
+  background: #f0f4ff;
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.12);
+  z-index: 1;
+}
+
+.calendar-cell.empty {
+  background: #f9fafb;
+  cursor: default;
+  border-color: transparent;
+}
+
+.calendar-cell.today {
+  border-color: #4f46e5;
+  background: #eef2ff;
+}
+
+.calendar-cell.today .day-number {
+  background: #4f46e5;
+  color: #fff;
+  border-radius: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.calendar-cell.sunday .day-number {
+  color: #ef4444;
+}
+
+.calendar-cell.saturday .day-number {
+  color: #3b82f6;
+}
+
+.calendar-cell.today .day-number {
+  color: #fff !important;
+}
+
+.calendar-cell.has-expense {
+  background: #fefce8;
+}
+
+.calendar-cell.has-expense:hover {
+  background: #fef9c3;
+}
+
+.day-number {
+  font-size: 0.85rem;
+  font-weight: 500;
+  line-height: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.day-total {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #d97706;
+  line-height: 1.2;
+}
+
+.day-count {
+  font-size: 0.68rem;
+  color: #9ca3af;
+  line-height: 1.2;
+}
+
+@media (max-width: 600px) {
+  .calendar-cell {
+    min-height: 52px;
+    padding: 0.2rem;
+  }
+
+  .day-total {
+    font-size: 0.65rem;
+  }
+
+  .day-count {
+    display: none;
+  }
+}

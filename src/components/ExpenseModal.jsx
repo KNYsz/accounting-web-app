@@ -1,0 +1,115 @@
+import { useState, useEffect } from 'react';
+import { CATEGORIES } from '../constants';
+import './ExpenseModal.css';
+
+export default function ExpenseModal({ date, expenses, onAdd, onDelete, onClose }) {
+  const [category, setCategory] = useState(CATEGORIES[0]);
+  const [amount, setAmount] = useState('');
+  const [description, setDescription] = useState('');
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    function handleKey(e) {
+      if (e.key === 'Escape') onClose();
+    }
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [onClose]);
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const parsedAmount = parseInt(amount, 10);
+    if (!parsedAmount || parsedAmount <= 0) {
+      setError('金額は1以上の整数を入力してください');
+      return;
+    }
+    onAdd({ date, category, amount: parsedAmount, description });
+    setAmount('');
+    setDescription('');
+    setError('');
+  }
+
+  const formattedDate = date
+    ? new Date(date + 'T00:00:00').toLocaleDateString('ja-JP', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        weekday: 'short',
+      })
+    : '';
+
+  return (
+    <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
+      <div className="modal" role="dialog" aria-modal="true" aria-label={`${formattedDate}の支出入力`}>
+        <button className="modal-close" onClick={onClose} aria-label="閉じる">×</button>
+        <h2 className="modal-title">{formattedDate}</h2>
+
+        <form className="expense-form" onSubmit={handleSubmit}>
+          <div className="form-row">
+            <label htmlFor="category">カテゴリ</label>
+            <select
+              id="category"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              {CATEGORIES.map((c) => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
+          </div>
+          <div className="form-row">
+            <label htmlFor="amount">金額 (円)</label>
+            <input
+              id="amount"
+              type="number"
+              min="1"
+              step="1"
+              placeholder="例: 1500"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-row">
+            <label htmlFor="description">メモ</label>
+            <input
+              id="description"
+              type="text"
+              placeholder="任意"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              maxLength={100}
+            />
+          </div>
+          {error && <p className="form-error">{error}</p>}
+          <button type="submit" className="btn btn-primary">追加</button>
+        </form>
+
+        {expenses.length > 0 && (
+          <div className="expense-list">
+            <h3>この日の支出</h3>
+            <ul>
+              {expenses.map((exp) => (
+                <li key={exp.id} className="expense-item">
+                  <span className="expense-category">{exp.category}</span>
+                  <span className="expense-desc">{exp.description}</span>
+                  <span className="expense-amount">¥{exp.amount.toLocaleString()}</span>
+                  <button
+                    className="btn btn-danger btn-sm"
+                    onClick={() => onDelete(exp.id)}
+                    aria-label="削除"
+                  >
+                    削除
+                  </button>
+                </li>
+              ))}
+            </ul>
+            <p className="expense-total">
+              合計: <strong>¥{expenses.reduce((s, e) => s + e.amount, 0).toLocaleString()}</strong>
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
