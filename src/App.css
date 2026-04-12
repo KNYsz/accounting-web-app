@@ -59,6 +59,84 @@ body {
   gap: 0.5rem;
 }
 
+.budget-panel {
+  max-width: 1100px;
+  width: 100%;
+  margin: 1rem auto 0;
+  padding: 0.9rem 1rem;
+  border: 1px solid #dbeafe;
+  background: linear-gradient(135deg, #eff6ff, #eef2ff);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.budget-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.budget-title {
+  font-weight: 700;
+  color: #1e3a8a;
+  font-size: 0.95rem;
+}
+
+.budget-meta {
+  font-size: 0.86rem;
+  color: #334155;
+}
+
+.budget-remaining {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #166534;
+}
+
+.budget-remaining.is-over {
+  color: #b91c1c;
+}
+
+.budget-form {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.budget-label {
+  font-size: 0.8rem;
+  color: #475569;
+  font-weight: 600;
+}
+
+.budget-input {
+  width: 9.5rem;
+  padding: 0.42rem 0.55rem;
+  border: 1px solid #bfdbfe;
+  border-radius: 6px;
+  font-size: 0.88rem;
+}
+
+.budget-save-btn {
+  border: 1px solid #1d4ed8;
+  background: #2563eb;
+  color: #fff;
+  border-radius: 6px;
+  padding: 0.42rem 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.budget-save-btn:hover {
+  background: #1d4ed8;
+}
+
 .nav-btn {
   background: rgba(255,255,255,0.15);
   color: #fff;
@@ -175,6 +253,15 @@ body {
 }
 
 @media (max-width: 600px) {
+  .budget-panel {
+    margin-top: 0.75rem;
+    border-radius: 8px;
+  }
+
+  .budget-input {
+    width: 100%;
+  }
+
   .app-main {
     padding: 1rem 0.75rem;
   }

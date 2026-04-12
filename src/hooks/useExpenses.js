@@ -1,11 +1,23 @@
 import { useState, useCallback } from 'react';
 
 const STORAGE_KEY = 'accounting_web_app_expenses';
+const MIN_DATE = '2026-04-01';
+
+function isValidExpenseDate(date) {
+  return typeof date === 'string' && date >= MIN_DATE;
+}
 
 function loadExpenses() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
+    const parsed = raw ? JSON.parse(raw) : [];
+    const filtered = parsed.filter((e) => isValidExpenseDate(e.date));
+
+    if (filtered.length !== parsed.length) {
+      saveExpenses(filtered);
+    }
+
+    return filtered;
   } catch {
     return [];
   }
@@ -19,6 +31,10 @@ export function useExpenses() {
   const [expenses, setExpenses] = useState(loadExpenses);
 
   const addExpense = useCallback((expense) => {
+    if (!isValidExpenseDate(expense.date)) {
+      return;
+    }
+
     setExpenses((prev) => {
       const next = [...prev, { ...expense, id: crypto.randomUUID() }];
       saveExpenses(next);
