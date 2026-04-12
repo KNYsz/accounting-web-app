@@ -1,0 +1,91 @@
+.summary-wrapper {
+  width: 100%;
+}
+
+.summary-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 1rem;
+}
+
+.summary-empty {
+  color: #6b7280;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.table-scroll {
+  overflow-x: auto;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+.summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  min-width: 900px;
+}
+
+.summary-table thead {
+  background: #4f46e5;
+  color: #fff;
+}
+
+.summary-table thead th {
+  padding: 0.6rem 0.5rem;
+  text-align: right;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.summary-table thead th.col-category {
+  text-align: left;
+  min-width: 80px;
+}
+
+.summary-table tbody tr {
+  border-bottom: 1px solid #f3f4f6;
+  transition: background 0.15s;
+}
+
+.summary-table tbody tr:hover {
+  background: #f8f9ff;
+}
+
+.summary-table tbody tr.row-zero {
+  color: #d1d5db;
+}
+
+.summary-table tfoot tr.row-total {
+  background: #f3f4f6;
+  font-weight: 700;
+  border-top: 2px solid #d1d5db;
+}
+
+.summary-table td {
+  padding: 0.55rem 0.5rem;
+  text-align: right;
+  color: #374151;
+}
+
+.summary-table td.col-category {
+  text-align: left;
+  font-weight: 500;
+  color: #111827;
+}
+
+.summary-table td.has-value {
+  color: #d97706;
+  font-weight: 600;
+}
+
+.summary-table tfoot td.has-value {
+  color: #111827;
+}
+
+.grand-total {
+  color: #111827 !important;
+  font-size: 0.95rem;
+}

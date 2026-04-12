@@ -1,0 +1,194 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Meiryo', sans-serif;
+  background: #f1f5f9;
+  color: #111827;
+  min-height: 100vh;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.app-header {
+  background: #4f46e5;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.4);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.app-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.app-year {
+  font-size: 0.85rem;
+  opacity: 0.8;
+  background: rgba(255,255,255,0.15);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+}
+
+/* Nav */
+.app-nav {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.nav-btn {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 0.4rem 0.85rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.nav-btn:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+.nav-btn.active {
+  background: #fff;
+  color: #4f46e5;
+  border-color: #fff;
+  font-weight: 700;
+}
+
+/* Main */
+.app-main {
+  flex: 1;
+  padding: 1.5rem;
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Month nav */
+.month-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.month-title {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.month-label {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.month-total {
+  font-size: 0.85rem;
+  color: #d97706;
+  font-weight: 600;
+}
+
+.icon-btn {
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  width: 2.2rem;
+  height: 2.2rem;
+  font-size: 1.3rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  color: #374151;
+}
+
+.icon-btn:hover {
+  background: #f3f4f6;
+}
+
+.today-btn {
+  background: #e0e7ff;
+  color: #4338ca;
+  border: 1px solid #c7d2fe;
+  border-radius: 6px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.today-btn:hover {
+  background: #c7d2fe;
+}
+
+.calendar-hint {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #9ca3af;
+  margin-top: 0.75rem;
+}
+
+/* Summary year nav */
+.summary-year-nav {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.summary-year-nav .icon-btn {
+  margin-top: 2.5rem;
+  flex-shrink: 0;
+}
+
+@media (max-width: 600px) {
+  .app-main {
+    padding: 1rem 0.75rem;
+  }
+
+  .month-label {
+    font-size: 1.1rem;
+  }
+
+  .summary-year-nav {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .summary-year-nav .icon-btn {
+    margin-top: 0;
+  }
+}
