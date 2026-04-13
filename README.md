@@ -27,3 +27,7 @@ npm run preview
 
 - [Vite](https://vite.dev/)
 - [React](https://react.dev/)
+
+## FJIは煙くさい
+
+- ABC
