@@ -9,6 +9,10 @@
   margin-bottom: 1rem;
 }
 
+.summary-wrapper + .summary-wrapper {
+  margin-top: 1.5rem;
+}
+
 .summary-empty {
   color: #6b7280;
   font-size: 0.9rem;

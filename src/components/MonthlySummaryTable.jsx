@@ -1,28 +1,31 @@
-import { CATEGORIES } from '../constants';
+import { EXPENSE_CATEGORIES, INCOME_CATEGORIES } from '../constants';
 import './MonthlySummaryTable.css';
 
 const MONTHS = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
 
-export default function MonthlySummaryTable({ year, getMonthlyCategoryTotals, getMonthlyTotal }) {
-  const rows = CATEGORIES.map((cat) => {
+export default function MonthlySummaryTable({ year, kind, getMonthlyCategoryTotals, getMonthlyTotal }) {
+  const categories = kind === 'income' ? INCOME_CATEGORIES : EXPENSE_CATEGORIES;
+  const kindLabel = kind === 'income' ? '収入' : '支出';
+
+  const rows = categories.map((cat) => {
     const monthlyAmounts = Array.from({ length: 12 }, (_, i) => {
-      const totals = getMonthlyCategoryTotals(year, i + 1);
+      const totals = getMonthlyCategoryTotals(year, i + 1, kind);
       return totals[cat] || 0;
     });
     const annualTotal = monthlyAmounts.reduce((s, a) => s + a, 0);
     return { cat, monthlyAmounts, annualTotal };
   });
 
-  const monthTotals = Array.from({ length: 12 }, (_, i) => getMonthlyTotal(year, i + 1));
+  const monthTotals = Array.from({ length: 12 }, (_, i) => getMonthlyTotal(year, i + 1, kind));
   const grandTotal = monthTotals.reduce((s, a) => s + a, 0);
 
   const hasAnyData = grandTotal > 0;
 
   return (
     <div className="summary-wrapper">
-      <h2 className="summary-title">{year}年 月別支出サマリー</h2>
+      <h2 className="summary-title">{year}年 月別{kindLabel}サマリー</h2>
       {!hasAnyData && (
-        <p className="summary-empty">まだ支出データがありません。カレンダーから記録を追加してください。</p>
+        <p className="summary-empty">まだ{kindLabel}データがありません。カレンダーから記録を追加してください。</p>
       )}
       <div className="table-scroll">
         <table className="summary-table">
