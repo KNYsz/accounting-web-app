@@ -19,9 +19,9 @@ export default function CalendarPage({
         <button className="icon-btn" onClick={prevMonth} aria-label="前月">‹</button>
         <div className="month-title">
           <span className="month-label">{year}年 {MONTHS_JA[month - 1]}</span>
-          {monthlyTotal > 0 && (
-            <span className="month-total">今月の合計: ¥{monthlyTotal.toLocaleString()}</span>
-          )}
+          <span className={`month-total${monthlyTotal < 0 ? ' negative' : ''}`}>
+            今月の収支: {monthlyTotal >= 0 ? '+' : '-'}¥{Math.abs(monthlyTotal).toLocaleString()}
+          </span>
         </div>
         <button className="icon-btn" onClick={nextMonth} aria-label="翌月">›</button>
         <button className="today-btn" onClick={goToday}>今日</button>
@@ -33,7 +33,7 @@ export default function CalendarPage({
         getByDate={getByDate}
         onDayClick={onDayClick}
       />
-      <p className="calendar-hint">日付をクリックして支出を記録できます</p>
+      <p className="calendar-hint">日付をクリックして収支を記録できます</p>
     </>
   );
 }

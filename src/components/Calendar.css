@@ -109,6 +109,10 @@
   line-height: 1.2;
 }
 
+.day-total.negative {
+  color: #dc2626;
+}
+
 .day-count {
   font-size: 0.68rem;
   color: #9ca3af;

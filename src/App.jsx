@@ -90,11 +90,16 @@ export default function App() {
     setBudgetInput('');
   }
 
-  const monthlyTotal = getMonthlyTotal(year, month);
+  const monthlyIncomeTotal = getMonthlyTotal(year, month, 'income');
+  const monthlyExpenseTotal = getMonthlyTotal(year, month, 'expense');
+  const monthlyTotal = monthlyIncomeTotal - monthlyExpenseTotal;
   const fiscalYear = month >= 4 ? year : year - 1;
-  const fiscalSpentFromStartYear = Array.from({ length: 9 }, (_, i) => getMonthlyTotal(fiscalYear, i + 4)).reduce((sum, value) => sum + value, 0);
-  const fiscalSpentFromNextYear = Array.from({ length: 3 }, (_, i) => getMonthlyTotal(fiscalYear + 1, i + 1)).reduce((sum, value) => sum + value, 0);
+  const fiscalSpentFromStartYear = Array.from({ length: 9 }, (_, i) => getMonthlyTotal(fiscalYear, i + 4, 'expense')).reduce((sum, value) => sum + value, 0);
+  const fiscalSpentFromNextYear = Array.from({ length: 3 }, (_, i) => getMonthlyTotal(fiscalYear + 1, i + 1, 'expense')).reduce((sum, value) => sum + value, 0);
   const fiscalSpent = fiscalSpentFromStartYear + fiscalSpentFromNextYear;
+  const fiscalIncomeFromStartYear = Array.from({ length: 9 }, (_, i) => getMonthlyTotal(fiscalYear, i + 4, 'income')).reduce((sum, value) => sum + value, 0);
+  const fiscalIncomeFromNextYear = Array.from({ length: 3 }, (_, i) => getMonthlyTotal(fiscalYear + 1, i + 1, 'income')).reduce((sum, value) => sum + value, 0);
+  const fiscalIncome = fiscalIncomeFromStartYear + fiscalIncomeFromNextYear;
   const fiscalBudget = budgetsByYear[fiscalYear] || 0;
   const remainingBudget = fiscalBudget - fiscalSpent;
   const hasBudget = fiscalBudget > 0;
@@ -129,6 +134,8 @@ export default function App() {
             期間: <strong>{fiscalYear}年4月〜{fiscalYear + 1}年3月</strong>
             {' / '}
             使用額: <strong>¥{fiscalSpent.toLocaleString()}</strong>
+            {' / '}
+            収入: <strong>¥{fiscalIncome.toLocaleString()}</strong>
             {' / '}
             予算: <strong>{hasBudget ? `¥${fiscalBudget.toLocaleString()}` : '未入力'}</strong>
           </p>

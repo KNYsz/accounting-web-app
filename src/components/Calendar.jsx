@@ -43,6 +43,7 @@ export default function Calendar({ year, month, getDailyTotal, getByDate, onDayC
           const weekday = (startWeekday + day - 1) % 7;
           const isSunday = weekday === 0;
           const isSaturday = weekday === 6;
+          const hasNetActivity = total !== 0 || expenses.length > 0;
 
           return (
             <div
@@ -52,7 +53,7 @@ export default function Calendar({ year, month, getDailyTotal, getByDate, onDayC
                 isToday ? 'today' : '',
                 isSunday ? 'sunday' : '',
                 isSaturday ? 'saturday' : '',
-                total > 0 ? 'has-expense' : '',
+                hasNetActivity ? 'has-expense' : '',
               ]
                 .filter(Boolean)
                 .join(' ')}
@@ -60,11 +61,13 @@ export default function Calendar({ year, month, getDailyTotal, getByDate, onDayC
               role="button"
               tabIndex={0}
               onKeyDown={(e) => e.key === 'Enter' && onDayClick(dateStr)}
-              aria-label={`${dateStr}${total > 0 ? ` ¥${total.toLocaleString()}` : ''}`}
+              aria-label={`${dateStr}${total !== 0 ? ` ${total > 0 ? '+' : '-'}¥${Math.abs(total).toLocaleString()}` : ''}`}
             >
               <span className="day-number">{day}</span>
-              {total > 0 && (
-                <span className="day-total">¥{total.toLocaleString()}</span>
+              {total !== 0 && (
+                <span className={`day-total${total < 0 ? ' negative' : ''}`}>
+                  {total > 0 ? '+' : '-'}¥{Math.abs(total).toLocaleString()}
+                </span>
               )}
               {expenses.length > 0 && (
                 <span className="day-count">{expenses.length}件</span>

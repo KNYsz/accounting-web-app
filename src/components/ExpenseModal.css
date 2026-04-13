@@ -58,6 +58,29 @@
   gap: 0.75rem;
 }
 
+.type-toggle {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.type-btn {
+  border: 1px solid #d1d5db;
+  background: #f9fafb;
+  color: #374151;
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.type-btn.active {
+  border-color: #4f46e5;
+  background: #eef2ff;
+  color: #3730a3;
+}
+
 .form-row {
   display: flex;
   flex-direction: column;
@@ -124,6 +147,24 @@
   font-size: 0.88rem;
 }
 
+.expense-kind {
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.expense-kind.expense {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.expense-kind.income {
+  background: #dcfce7;
+  color: #15803d;
+}
+
 .expense-category {
   background: #e0e7ff;
   color: #4338ca;
@@ -153,6 +194,10 @@
   font-size: 0.9rem;
   text-align: right;
   color: #374151;
+}
+
+.expense-total strong {
+  white-space: nowrap;
 }
 
 .btn {

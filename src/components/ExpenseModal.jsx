@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
-import { CATEGORIES } from '../constants';
+import { ENTRY_TYPES, EXPENSE_CATEGORIES, INCOME_CATEGORIES } from '../constants';
 import './ExpenseModal.css';
 
 export default function ExpenseModal({ date, expenses, onAdd, onDelete, onClose }) {
-  const [category, setCategory] = useState(CATEGORIES[0]);
+  const [entryType, setEntryType] = useState('expense');
+  const [category, setCategory] = useState(EXPENSE_CATEGORIES[0]);
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
+
+  const categories = entryType === 'income' ? INCOME_CATEGORIES : EXPENSE_CATEGORIES;
 
   useEffect(() => {
     function handleKey(e) {
@@ -16,6 +19,12 @@ export default function ExpenseModal({ date, expenses, onAdd, onDelete, onClose 
     return () => window.removeEventListener('keydown', handleKey);
   }, [onClose]);
 
+  useEffect(() => {
+    if (!categories.includes(category)) {
+      setCategory(categories[0]);
+    }
+  }, [category, categories]);
+
   function handleSubmit(e) {
     e.preventDefault();
     const parsedAmount = parseInt(amount, 10);
@@ -23,7 +32,7 @@ export default function ExpenseModal({ date, expenses, onAdd, onDelete, onClose 
       setError('金額は1以上の整数を入力してください');
       return;
     }
-    onAdd({ date, category, amount: parsedAmount, description });
+    onAdd({ date, kind: entryType, category, amount: parsedAmount, description });
     setAmount('');
     setDescription('');
     setError('');
@@ -40,11 +49,27 @@ export default function ExpenseModal({ date, expenses, onAdd, onDelete, onClose 
 
   return (
     <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
-      <div className="modal" role="dialog" aria-modal="true" aria-label={`${formattedDate}の支出入力`}>
+      <div className="modal" role="dialog" aria-modal="true" aria-label={`${formattedDate}の収支入力`}>
         <button className="modal-close" onClick={onClose} aria-label="閉じる">×</button>
         <h2 className="modal-title">{formattedDate}</h2>
 
         <form className="expense-form" onSubmit={handleSubmit}>
+          <div className="form-row">
+            <label htmlFor="entry-type">区分</label>
+            <div className="type-toggle" id="entry-type" role="radiogroup" aria-label="区分">
+              {ENTRY_TYPES.map((type) => (
+                <button
+                  key={type}
+                  type="button"
+                  className={`type-btn${entryType === type ? ' active' : ''}`}
+                  onClick={() => setEntryType(type)}
+                  aria-pressed={entryType === type}
+                >
+                  {type === 'income' ? '収入' : '支出'}
+                </button>
+              ))}
+            </div>
+          </div>
           <div className="form-row">
             <label htmlFor="category">カテゴリ</label>
             <select
@@ -52,7 +77,7 @@ export default function ExpenseModal({ date, expenses, onAdd, onDelete, onClose 
               value={category}
               onChange={(e) => setCategory(e.target.value)}
             >
-              {CATEGORIES.map((c) => (
+              {categories.map((c) => (
                 <option key={c} value={c}>{c}</option>
               ))}
             </select>
@@ -87,10 +112,13 @@ export default function ExpenseModal({ date, expenses, onAdd, onDelete, onClose 
 
         {expenses.length > 0 && (
           <div className="expense-list">
-            <h3>この日の支出</h3>
+            <h3>この日の収支</h3>
             <ul>
               {expenses.map((exp) => (
                 <li key={exp.id} className="expense-item">
+                  <span className={`expense-kind ${exp.kind === 'income' ? 'income' : 'expense'}`}>
+                    {exp.kind === 'income' ? '収入' : '支出'}
+                  </span>
                   <span className="expense-category">{exp.category}</span>
                   <span className="expense-desc">{exp.description}</span>
                   <span className="expense-amount">¥{exp.amount.toLocaleString()}</span>
@@ -105,7 +133,16 @@ export default function ExpenseModal({ date, expenses, onAdd, onDelete, onClose 
               ))}
             </ul>
             <p className="expense-total">
-              合計: <strong>¥{expenses.reduce((s, e) => s + e.amount, 0).toLocaleString()}</strong>
+              収支合計:{' '}
+              <strong>
+                {(() => {
+                  const total = expenses.reduce(
+                    (sum, entry) => sum + (entry.kind === 'expense' ? -entry.amount : entry.amount),
+                    0
+                  );
+                  return `${total >= 0 ? '+' : '-'}¥${Math.abs(total).toLocaleString()}`;
+                })()}
+              </strong>
             </p>
           </div>
         )}
