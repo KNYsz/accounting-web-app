@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { ENTRY_TYPES, EXPENSE_CATEGORIES, INCOME_CATEGORIES } from '../constants';
 import './ExpenseModal.css';
 
-export default function ExpenseModal({ date, expenses, onAdd, onDelete, onClose }) {
+export default function ExpenseModal({ date, expenses, onAdd, onUpdate, onDelete, onClose }) {
   const [entryType, setEntryType] = useState('expense');
   const [category, setCategory] = useState(EXPENSE_CATEGORIES[0]);
   const [amount, setAmount] = useState('');
@@ -121,7 +121,19 @@ export default function ExpenseModal({ date, expenses, onAdd, onDelete, onClose 
                   </span>
                   <span className="expense-category">{exp.category}</span>
                   <span className="expense-desc">{exp.description}</span>
-                  <span className="expense-amount">¥{exp.amount.toLocaleString()}</span>
+                  <span className={`expense-amount${exp.kind === 'expense' && !exp.paid ? ' unpaid' : ''}`}>
+                    ¥{exp.amount.toLocaleString()}
+                  </span>
+                  {exp.kind === 'expense' && (
+                    <label className="expense-paid-toggle">
+                      <input
+                        type="checkbox"
+                        checked={Boolean(exp.paid)}
+                        onChange={(e) => onUpdate(exp.id, { paid: e.target.checked })}
+                      />
+                      支払済
+                    </label>
+                  )}
                   <button
                     className="btn btn-danger btn-sm"
                     onClick={() => onDelete(exp.id)}
@@ -137,13 +149,15 @@ export default function ExpenseModal({ date, expenses, onAdd, onDelete, onClose 
               <strong>
                 {(() => {
                   const total = expenses.reduce(
-                    (sum, entry) => sum + (entry.kind === 'expense' ? -entry.amount : entry.amount),
+                    (sum, entry) =>
+                      sum + (entry.kind === 'expense' ? (entry.paid ? -entry.amount : 0) : entry.amount),
                     0
                   );
                   return `${total >= 0 ? '+' : '-'}¥${Math.abs(total).toLocaleString()}`;
                 })()}
               </strong>
             </p>
+            <p className="expense-note">※ 未払いの支出は合計に含まれません</p>
           </div>
         )}
       </div>

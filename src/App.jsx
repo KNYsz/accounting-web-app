@@ -35,6 +35,7 @@ export default function App() {
 
   const {
     addExpense,
+    updateExpense,
     deleteExpense,
     getByDate,
     getDailyTotal,
@@ -101,7 +102,7 @@ export default function App() {
   const fiscalIncomeFromNextYear = Array.from({ length: 3 }, (_, i) => getMonthlyTotal(fiscalYear + 1, i + 1, 'income')).reduce((sum, value) => sum + value, 0);
   const fiscalIncome = fiscalIncomeFromStartYear + fiscalIncomeFromNextYear;
   const fiscalBudget = budgetsByYear[fiscalYear] || 0;
-  const remainingBudget = fiscalBudget - fiscalSpent;
+  const remainingBudget = fiscalBudget + fiscalIncome - fiscalSpent;
   const hasBudget = fiscalBudget > 0;
 
   return (
@@ -201,6 +202,7 @@ export default function App() {
           date={selectedDate}
           expenses={getByDate(selectedDate)}
           onAdd={addExpense}
+          onUpdate={updateExpense}
           onDelete={deleteExpense}
           onClose={() => setSelectedDate(null)}
         />

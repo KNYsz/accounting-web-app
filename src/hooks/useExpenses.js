@@ -12,9 +12,18 @@ function isValidExpenseDate(date) {
 }
 
 function normalizeExpense(expense) {
+  const normalizedKind = isValidKind(expense.kind) ? expense.kind : 'expense';
+  const normalizedPaid =
+    normalizedKind === 'income'
+      ? true
+      : typeof expense.paid === 'boolean'
+        ? expense.paid
+        : true;
+
   return {
     ...expense,
-    kind: isValidKind(expense.kind) ? expense.kind : 'expense',
+    kind: normalizedKind,
+    paid: normalizedPaid,
   };
 }
 
@@ -49,7 +58,19 @@ export function useExpenses() {
     }
 
     setExpenses((prev) => {
-      const next = [...prev, normalizeExpense({ ...expense, id: crypto.randomUUID() })];
+      const next = [
+        ...prev,
+        normalizeExpense({
+          ...expense,
+          id: crypto.randomUUID(),
+          paid:
+            expense.kind === 'income'
+              ? true
+              : typeof expense.paid === 'boolean'
+                ? expense.paid
+                : false,
+        }),
+      ];
       saveExpenses(next);
       return next;
     });
@@ -87,7 +108,12 @@ export function useExpenses() {
   const getDailyTotal = useCallback(
     (dateStr, kind) =>
       expenses
-        .filter((e) => e.date === dateStr && (!kind || e.kind === kind))
+        .filter(
+          (e) =>
+            e.date === dateStr &&
+            (!kind || e.kind === kind) &&
+            (e.kind !== 'expense' || e.paid)
+        )
         .reduce((sum, e) => {
           if (kind === 'expense' || kind === 'income') {
             return sum + e.amount;
@@ -102,7 +128,12 @@ export function useExpenses() {
     (year, month, kind) => {
       const prefix = `${year}-${String(month).padStart(2, '0')}`;
       return expenses
-        .filter((e) => e.date.startsWith(prefix) && (!kind || e.kind === kind))
+        .filter(
+          (e) =>
+            e.date.startsWith(prefix) &&
+            (!kind || e.kind === kind) &&
+            (e.kind !== 'expense' || e.paid)
+        )
         .reduce((sum, e) => {
           if (kind === 'expense' || kind === 'income') {
             return sum + e.amount;
@@ -118,7 +149,10 @@ export function useExpenses() {
     (year, month, kind) => {
       const prefix = `${year}-${String(month).padStart(2, '0')}`;
       const monthExpenses = expenses.filter(
-        (e) => e.date.startsWith(prefix) && (!kind || e.kind === kind)
+        (e) =>
+          e.date.startsWith(prefix) &&
+          (!kind || e.kind === kind) &&
+          (e.kind !== 'expense' || e.paid)
       );
       return monthExpenses.reduce((acc, e) => {
         acc[e.category] = (acc[e.category] || 0) + e.amount;
